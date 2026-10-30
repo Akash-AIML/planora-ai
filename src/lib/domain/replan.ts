@@ -123,13 +123,17 @@ export function distribute(weights: number[], amount: number, weightTotal: numbe
     }
   }
 
-  // Guard against floating point leftovers.
+  // Guard against floating point leftovers without infinite loop risk
   let cursor = 0;
-  while (remainder > 0 && weights.length > 0) {
+  let stagnantPasses = 0;
+  while (remainder > 0 && weights.length > 0 && stagnantPasses < weights.length) {
     const index = cursor % weights.length;
     if (result[index] < weights[index]) {
       result[index] += 1;
       remainder -= 1;
+      stagnantPasses = 0;
+    } else {
+      stagnantPasses += 1;
     }
     cursor += 1;
   }

@@ -114,14 +114,32 @@ export function generateTimeline(event: Pick<EventRequirements, "eventType" | "e
   }));
 }
 
-/** Parse a date-only string as UTC midnight so timezones cannot shift the day. */
+/** Parse a date-only string as UTC midnight, strictly validating calendar bounds to prevent rollover. */
 export function parseDateOnly(value: string): Date {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (typeof value !== "string") return new Date(Number.NaN);
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
   if (!match) return new Date(Number.NaN);
-  return new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
+
+  const year = Number(match[1]);
+  const month = Number(match[2]) - 1;
+  const day = Number(match[3]);
+
+  const date = new Date(Date.UTC(year, month, day));
+
+  // Verify components match exactly to reject invalid dates like Feb 31 or Nov 31
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month ||
+    date.getUTCDate() !== day
+  ) {
+    return new Date(Number.NaN);
+  }
+
+  return date;
 }
 
 export function formatDateOnly(date: Date): string {
+  if (!date || Number.isNaN(date.getTime())) return "";
   return date.toISOString().slice(0, 10);
 }
 
@@ -129,7 +147,8 @@ export function addDays(value: string, days: number): string {
   const date = parseDateOnly(value);
   if (Number.isNaN(date.getTime())) return value;
   date.setUTCDate(date.getUTCDate() + days);
-  return formatDateOnly(date);
+  const formatted = formatDateOnly(date);
+  return formatted || value;
 }
 
 export function daysUntil(value: string, now = new Date()): number | null {

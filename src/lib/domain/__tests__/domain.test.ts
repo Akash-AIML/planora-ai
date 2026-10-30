@@ -49,6 +49,22 @@ describe("Domain Logic Unit Tests", () => {
       expect(formatDateOnly(parsed)).toBe(dateStr);
     });
 
+    it("strictly rejects rollover dates like February 31 and safely formats invalid dates", () => {
+      // 2026-02-31 is invalid and must not roll over to March
+      const invalidFeb = parseDateOnly("2026-02-31");
+      expect(Number.isNaN(invalidFeb.getTime())).toBe(true);
+      expect(formatDateOnly(invalidFeb)).toBe("");
+
+      // Valid leap year check or valid month
+      const validDate = parseDateOnly("2026-02-28");
+      expect(Number.isNaN(validDate.getTime())).toBe(false);
+      expect(formatDateOnly(validDate)).toBe("2026-02-28");
+
+      // Non-string or malformed inputs
+      expect(Number.isNaN(parseDateOnly("" as unknown as string).getTime())).toBe(true);
+      expect(Number.isNaN(parseDateOnly("not-a-date").getTime())).toBe(true);
+    });
+
     it("calculates relative days and daysUntil correctly", () => {
       const base = "2026-11-01";
       expect(addDays(base, 10)).toBe("2026-11-11");

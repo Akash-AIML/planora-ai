@@ -95,6 +95,27 @@ export function createNewEventDetail(params: {
   };
 }
 
+function sanitizeEventDetail(detail: unknown): EventDetail | null {
+  if (!detail || typeof detail !== "object") return null;
+  const d = detail as Partial<EventDetail>;
+  if (!d.event || !d.event.id || !d.event.title) return null;
+
+  const budgetItems = Array.isArray(d.budgetItems) ? d.budgetItems : [];
+  const totals =
+    d.totals && typeof d.totals === "object"
+      ? d.totals
+      : calculateBudgetTotals(budgetItems, d.event.budgetInr ?? 0);
+
+  return {
+    event: d.event,
+    budgetItems,
+    tasks: Array.isArray(d.tasks) ? d.tasks : [],
+    ideas: Array.isArray(d.ideas) ? d.ideas : [],
+    shortlist: Array.isArray(d.shortlist) ? d.shortlist : [],
+    totals,
+  };
+}
+
 export function loadAllEvents(): EventDetail[] {
   if (typeof window === "undefined") return [];
   try {
@@ -106,7 +127,11 @@ export function loadAllEvents(): EventDetail[] {
       return [initial];
     }
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    if (!Array.isArray(parsed)) return [];
+    const valid = parsed
+      .map(sanitizeEventDetail)
+      .filter((item): item is EventDetail => item !== null);
+    return valid.length > 0 ? valid : [getSampleInitialEvent()];
   } catch (err) {
     console.error("Failed to load events from localStorage:", err);
     return [];
@@ -118,7 +143,11 @@ export function saveAllEvents(events: EventDetail[]): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
   } catch (err) {
-    console.error("Failed to save events to localStorage:", err);
+    if (err instanceof DOMException && err.name === "QuotaExceededError") {
+      console.error("Planora AI: LocalStorage quota exceeded while saving events.");
+    } else {
+      console.error("Failed to save events to localStorage:", err);
+    }
   }
 }
 
@@ -129,12 +158,16 @@ export function getActiveEventId(): string | null {
 
 export function setActiveEventId(id: string): void {
   if (typeof window === "undefined") return;
-  localStorage.setItem(ACTIVE_KEY, id);
+  try {
+    localStorage.setItem(ACTIVE_KEY, id);
+  } catch (err) {
+    console.error("Failed to set active event ID in localStorage:", err);
+  }
 }
 
 export function buildPlanoraExport(detail: EventDetail): PlanoraExport {
   const vendorMap = new Map(DEMO_VENDORS.map((v) => [v.id, v]));
-  const shortlistedVendors = detail.shortlist
+  const shortlistedVendors = (detail.shortlist ?? [])
     .map((entry) => {
       const vendor = vendorMap.get(entry.vendorId);
       return vendor ? { entry, vendor } : null;
@@ -146,11 +179,11 @@ export function buildPlanoraExport(detail: EventDetail): PlanoraExport {
     app: "Planora AI",
     event: detail.event,
     budget: {
-      items: detail.budgetItems,
+      items: detail.budgetItems ?? [],
       totals: detail.totals,
     },
-    tasks: detail.tasks,
-    ideas: detail.ideas,
+    tasks: detail.tasks ?? [],
+    ideas: detail.ideas ?? [],
     vendors: shortlistedVendors,
     disclaimer:
       "All vendor listings and price estimates are illustrative demo figures. Verify live availability and commercial quotes before signing contracts.",
