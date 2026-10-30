@@ -40,3 +40,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# demo video submission artifacts & scripts
+/public/demo/
+/scripts/
+*.webm
+*.mp4
