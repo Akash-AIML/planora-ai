@@ -96,44 +96,60 @@ export function createNewEventDetail(params: {
   };
 }
 
+function isRecord(val: unknown): val is Record<string, unknown> {
+  return typeof val === "object" && val !== null;
+}
+
 function sanitizeEventDetail(detail: unknown): EventDetail | null {
-  if (!detail || typeof detail !== "object") return null;
-  const d = detail as Partial<EventDetail>;
-  if (!d.event || !d.event.id || !d.event.title) return null;
+  if (!isRecord(detail)) return null;
+
+  const rawEvent = detail.event;
+  if (!isRecord(rawEvent) || typeof rawEvent.id !== "string" || typeof rawEvent.title !== "string") {
+    return null;
+  }
 
   const safeEvent: EventRecord = {
-    ...d.event,
-    title: sanitizeString(d.event.title, 200),
-    city: sanitizeString(d.event.city, 100),
-    notes: sanitizeString(d.event.notes || "", 2000),
-    preferences: Array.isArray(d.event.preferences)
-      ? d.event.preferences.map((p) => sanitizeString(p, 100))
+    id: rawEvent.id,
+    title: sanitizeString(rawEvent.title, 200),
+    eventType: (typeof rawEvent.eventType === "string" ? rawEvent.eventType : "wedding") as EventRecord["eventType"],
+    city: sanitizeString(typeof rawEvent.city === "string" ? rawEvent.city : "Jaipur", 100),
+    eventDate: typeof rawEvent.eventDate === "string" ? rawEvent.eventDate : "2026-11-20",
+    guestCount: typeof rawEvent.guestCount === "number" ? Math.max(1, rawEvent.guestCount) : 100,
+    budgetInr: typeof rawEvent.budgetInr === "number" ? Math.max(1000, rawEvent.budgetInr) : 500000,
+    preferences: Array.isArray(rawEvent.preferences)
+      ? rawEvent.preferences.filter((p): p is string => typeof p === "string").map((p) => sanitizeString(p, 100))
       : [],
+    notes: sanitizeString(typeof rawEvent.notes === "string" ? rawEvent.notes : "", 2000),
+    version: typeof rawEvent.version === "number" ? rawEvent.version : 1,
+    createdAt: typeof rawEvent.createdAt === "string" ? rawEvent.createdAt : new Date().toISOString(),
+    updatedAt: typeof rawEvent.updatedAt === "string" ? rawEvent.updatedAt : new Date().toISOString(),
   };
 
-  const rawBudgetItems = Array.isArray(d.budgetItems) ? d.budgetItems : [];
+  const rawBudgetItems = Array.isArray(detail.budgetItems) ? detail.budgetItems : [];
   const budgetItems: BudgetItem[] = rawBudgetItems.map((item) => ({
     ...item,
     label: sanitizeString(item.label, 150),
     notes: sanitizeString(item.notes || "", 500),
   }));
 
-  const rawTasks = Array.isArray(d.tasks) ? d.tasks : [];
+  const rawTasks = Array.isArray(detail.tasks) ? detail.tasks : [];
   const tasks: Task[] = rawTasks.map((task) => ({
     ...task,
     title: sanitizeString(task.title, 200),
   }));
 
-  const rawIdeas = Array.isArray(d.ideas) ? d.ideas : [];
+  const rawIdeas = Array.isArray(detail.ideas) ? detail.ideas : [];
   const ideas: EventIdea[] = rawIdeas.map((idea) => ({
     ...idea,
     title: sanitizeString(idea.title, 200),
     description: sanitizeString(idea.description, 1000),
   }));
 
+  const rawShortlist = Array.isArray(detail.shortlist) ? detail.shortlist : [];
+
   const totals =
-    d.totals && typeof d.totals === "object"
-      ? d.totals
+    isRecord(detail.totals) && typeof detail.totals.plannedInr === "number"
+      ? (detail.totals as unknown as EventDetail["totals"])
       : calculateBudgetTotals(budgetItems, safeEvent.budgetInr ?? 0);
 
   return {
@@ -141,7 +157,7 @@ function sanitizeEventDetail(detail: unknown): EventDetail | null {
     budgetItems,
     tasks,
     ideas,
-    shortlist: Array.isArray(d.shortlist) ? d.shortlist : [],
+    shortlist: rawShortlist,
     totals,
   };
 }
