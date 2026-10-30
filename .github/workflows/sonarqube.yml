@@ -1,4 +1,4 @@
-name: SonarQube Code Analysis & Automated Testing
+name: Automated Testing & Build Verification
 
 on:
   push:
@@ -13,15 +13,15 @@ permissions:
   pull-requests: read
 
 jobs:
-  test-and-scan:
-    name: Automated Testing & SonarQube Scan
+  test-and-build:
+    name: Automated Testing & Build Verification
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Full history required for accurate blame & quality gate metrics
+          fetch-depth: 0
 
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
@@ -42,17 +42,3 @@ jobs:
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
-
-      - name: Check SONAR_TOKEN Configuration
-        if: ${{ env.SONAR_TOKEN == '' }}
-        run: echo "::warning::SONAR_TOKEN is not configured in repository secrets. Add SONAR_TOKEN to GitHub repository secrets to enable remote SonarQube / SonarCloud code quality scans."
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: SonarQube / SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v6
-        if: ${{ env.SONAR_TOKEN != '' }}
-        continue-on-error: true # Prevents CI failure if Automatic Analysis is enabled in SonarCloud
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL || 'https://sonarcloud.io' }}
