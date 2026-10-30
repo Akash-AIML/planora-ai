@@ -11,6 +11,7 @@ import { allocateBudget, calculateBudgetTotals } from "./budget";
 import { generateTimeline } from "./timeline";
 import { generateIdeas } from "./ideas";
 import { DEMO_VENDORS } from "@/lib/data/demo-vendors";
+import { sanitizeString } from "@/lib/security/sanitization";
 
 const STORAGE_KEY = "planora_ai_events_v1";
 const ACTIVE_KEY = "planora_ai_active_id";
@@ -100,17 +101,46 @@ function sanitizeEventDetail(detail: unknown): EventDetail | null {
   const d = detail as Partial<EventDetail>;
   if (!d.event || !d.event.id || !d.event.title) return null;
 
-  const budgetItems = Array.isArray(d.budgetItems) ? d.budgetItems : [];
+  const safeEvent: EventRecord = {
+    ...d.event,
+    title: sanitizeString(d.event.title, 200),
+    city: sanitizeString(d.event.city, 100),
+    notes: sanitizeString(d.event.notes || "", 2000),
+    preferences: Array.isArray(d.event.preferences)
+      ? d.event.preferences.map((p) => sanitizeString(p, 100))
+      : [],
+  };
+
+  const rawBudgetItems = Array.isArray(d.budgetItems) ? d.budgetItems : [];
+  const budgetItems: BudgetItem[] = rawBudgetItems.map((item) => ({
+    ...item,
+    label: sanitizeString(item.label, 150),
+    notes: sanitizeString(item.notes || "", 500),
+  }));
+
+  const rawTasks = Array.isArray(d.tasks) ? d.tasks : [];
+  const tasks: Task[] = rawTasks.map((task) => ({
+    ...task,
+    title: sanitizeString(task.title, 200),
+  }));
+
+  const rawIdeas = Array.isArray(d.ideas) ? d.ideas : [];
+  const ideas: EventIdea[] = rawIdeas.map((idea) => ({
+    ...idea,
+    title: sanitizeString(idea.title, 200),
+    description: sanitizeString(idea.description, 1000),
+  }));
+
   const totals =
     d.totals && typeof d.totals === "object"
       ? d.totals
-      : calculateBudgetTotals(budgetItems, d.event.budgetInr ?? 0);
+      : calculateBudgetTotals(budgetItems, safeEvent.budgetInr ?? 0);
 
   return {
-    event: d.event,
+    event: safeEvent,
     budgetItems,
-    tasks: Array.isArray(d.tasks) ? d.tasks : [],
-    ideas: Array.isArray(d.ideas) ? d.ideas : [],
+    tasks,
+    ideas,
     shortlist: Array.isArray(d.shortlist) ? d.shortlist : [],
     totals,
   };

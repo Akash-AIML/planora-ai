@@ -3,6 +3,7 @@ import { z } from "zod";
 import { parseEventBrief } from "@/lib/domain/extraction";
 import { generateIdeas } from "@/lib/domain/ideas";
 import type { EventType, ExtractionResult, EventIdea } from "@/lib/domain/types";
+import { guardApiRequest } from "@/lib/security/middleware-guard";
 
 const RequestSchema = z
   .object({
@@ -57,8 +58,21 @@ function normalizeModelName(raw?: string): string {
 
 export async function POST(req: Request) {
   try {
-    const json = await req.json();
-    const parsedInput = RequestSchema.safeParse(json);
+    const guard = await guardApiRequest(req, {
+      allowedMethods: ["POST"],
+      maxPayloadBytes: 64 * 1024,
+      rateLimit: { maxRequests: 25, windowMs: 60 * 1000 },
+    });
+
+    if (!guard.success) {
+      return guard.response!;
+    }
+
+    if (guard.sessionHijackAttempt) {
+      console.warn(`[SECURITY ALERT] Session hijacking detected from IP: ${guard.clientIp}`);
+    }
+
+    const parsedInput = RequestSchema.safeParse(guard.sanitizedBody);
     if (!parsedInput.success) {
       return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
     }
