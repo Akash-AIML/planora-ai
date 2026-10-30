@@ -8,7 +8,7 @@ export function Footer() {
           <strong>Planora AI</strong> · GenAI Event Copilot & Budget Replanner · Hack2Skill Prompt Wars
         </p>
         <p className="text-[11px] text-muted-foreground/80">
-          Deterministic Mathematical Optimization · Next.js 16 · Tailwind CSS · shadcn/ui
+          © 2026 Planora AI. All rights reserved.
         </p>
       </div>
     </footer>
