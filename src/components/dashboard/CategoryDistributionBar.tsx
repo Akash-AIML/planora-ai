@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
-import { IndianRupee } from "lucide-react";
+import { IndianRupee, ArrowRight } from "lucide-react";
 import { formatInr } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import type { BudgetTotals } from "@/lib/domain/types";
 
 interface CategoryDistributionBarProps {
@@ -26,19 +28,21 @@ export function CategoryDistributionBar({
   onViewBudgetTab,
 }: CategoryDistributionBarProps) {
   return (
-    <div className="glass-panel rounded-2xl p-6 space-y-4">
+    <Card className="p-6 space-y-4 border-border/80 shadow-xs bg-card transition-colors">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-white uppercase tracking-wider flex items-center gap-2">
-          <IndianRupee className="w-4 h-4 text-amber-400" />
+        <h3 className="text-sm font-bold text-foreground uppercase tracking-wider flex items-center gap-2">
+          <IndianRupee className="w-4 h-4 text-amber-500 dark:text-amber-400" />
           Budget Allocation Distribution
         </h3>
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={onViewBudgetTab}
-          className="text-xs text-amber-400 hover:underline cursor-pointer"
+          className="text-xs text-amber-600 dark:text-amber-400 hover:text-amber-500 p-0 h-auto font-medium gap-1 cursor-pointer"
         >
-          View & Edit Breakdown →
-        </button>
+          <span>View & Edit Breakdown</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Button>
       </div>
 
       {/* Multi-segmented Bar */}
@@ -48,7 +52,7 @@ export function CategoryDistributionBar({
         aria-valuenow={100}
         aria-valuemin={0}
         aria-valuemax={100}
-        className="w-full h-4 rounded-full bg-slate-800 overflow-hidden flex"
+        className="w-full h-4 rounded-full bg-muted overflow-hidden flex shadow-inner"
       >
         {totals.byCategory.map((cat, idx) => {
           const color = CATEGORY_COLORS[idx % CATEGORY_COLORS.length];
@@ -57,7 +61,7 @@ export function CategoryDistributionBar({
               key={cat.category}
               style={{ width: `${cat.share * 100}%` }}
               title={`${cat.category}: ${formatInr(cat.plannedInr)} (${Math.round(cat.share * 100)}%)`}
-              className={`${color} h-full transition-all hover:opacity-80`}
+              className={`${color} h-full transition-all hover:opacity-85`}
             />
           );
         })}
@@ -70,14 +74,14 @@ export function CategoryDistributionBar({
           return (
             <div key={cat.category} className="flex items-center gap-1.5">
               <span className={`w-2.5 h-2.5 rounded-full ${color}`} />
-              <span className="text-slate-300 font-medium">{cat.category}</span>
-              <span className="text-slate-400">
+              <span className="text-foreground font-medium">{cat.category}</span>
+              <span className="text-muted-foreground">
                 ({Math.round(cat.share * 100)}% · {formatInr(cat.plannedInr)})
               </span>
             </div>
           );
         })}
       </div>
-    </div>
+    </Card>
   );
 }

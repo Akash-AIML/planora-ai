@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { Filter, MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { VENDOR_CATEGORY_LABELS, DEMO_VENDORS } from "@/lib/data/demo-vendors";
 import { rankVendors, compareVendors } from "@/lib/domain/vendors";
 import type { EventDetail, ShortlistStatus, VendorCategory } from "@/lib/domain/types";
@@ -63,13 +64,13 @@ export function VendorDirectory({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-white tracking-tight">Curated Vendor Directory</h2>
-          <p className="text-xs text-slate-400">
+          <h2 className="text-lg font-bold text-foreground tracking-tight">Curated Vendor Directory</h2>
+          <p className="text-xs text-muted-foreground">
             Scored against your city ({currentEvent.event.city}), category budget limits, and
             preferences.
           </p>
         </div>
-        <div className="text-xs px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300">
+        <div className="text-xs px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-medium">
           ⚠ Demo Listings: Verified for simulation; confirm commercial quotes.
         </div>
       </div>
@@ -82,38 +83,36 @@ export function VendorDirectory({
 
       {/* Filters */}
       <div className="flex flex-wrap gap-3 items-center justify-between">
-        <div className="flex flex-wrap gap-2 items-center">
-          <span className="text-xs text-slate-400 flex items-center gap-1">
+        <div className="flex flex-wrap gap-1.5 items-center">
+          <span className="text-xs text-muted-foreground flex items-center gap-1 font-medium mr-1">
             <Filter className="w-3.5 h-3.5" /> Category:
           </span>
           {CATEGORIES.map((cat) => (
-            <button
+            <Button
               key={cat}
+              variant={categoryFilter === cat ? "amber" : "outline"}
+              size="xs"
               onClick={() => setCategoryFilter(cat)}
-              className={`px-3 py-1 rounded-lg text-xs font-medium transition cursor-pointer ${
-                categoryFilter === cat
-                  ? "bg-amber-500 text-slate-950 font-bold"
-                  : "bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-800"
-              }`}
+              className="cursor-pointer font-medium text-xs shadow-2xs"
             >
               {cat === "all" ? "All Categories" : VENDOR_CATEGORY_LABELS[cat]}
-            </button>
+            </Button>
           ))}
         </div>
 
         {/* City Filter */}
         <div className="flex items-center gap-2">
-          <label htmlFor="vendor-city-select" className="text-xs text-slate-400 flex items-center gap-1">
-            <MapPin className="w-3.5 h-3.5 text-slate-400" /> City:
+          <label htmlFor="vendor-city-select" className="text-xs text-muted-foreground flex items-center gap-1 font-medium">
+            <MapPin className="w-3.5 h-3.5" /> City:
           </label>
           <select
             id="vendor-city-select"
             value={cityFilter}
             onChange={(e) => setCityFilter(e.target.value)}
-            className="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-amber-400 cursor-pointer"
+            className="bg-background border border-input rounded-lg px-2.5 py-1 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer transition shadow-2xs"
           >
             {CITIES.map((c) => (
-              <option key={c} value={c}>
+              <option key={c} value={c} className="bg-popover text-popover-foreground">
                 {c === "all" ? "All Cities" : c}
               </option>
             ))}

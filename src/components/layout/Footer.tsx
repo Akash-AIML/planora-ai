@@ -2,11 +2,15 @@ import React from "react";
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-slate-900 bg-slate-950/60 py-6 text-center text-xs text-slate-500 no-print">
-      <p>
-        Planora AI · Built for Hack2Skill Prompt Wars · Next.js 16 · React 19 · TypeScript ·
-        Deterministic Replanning
-      </p>
+    <footer className="mt-auto border-t border-border/80 bg-background/50 backdrop-blur-sm py-6 text-center text-xs text-muted-foreground no-print transition-colors">
+      <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <p>
+          <strong>Planora AI</strong> · GenAI Event Copilot & Budget Replanner · Hack2Skill Prompt Wars
+        </p>
+        <p className="text-[11px] text-muted-foreground/80">
+          Deterministic Mathematical Optimization · Next.js 16 · Tailwind CSS · shadcn/ui
+        </p>
+      </div>
     </footer>
   );
 }

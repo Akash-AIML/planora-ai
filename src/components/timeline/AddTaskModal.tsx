@@ -1,9 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import { Modal } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import type { TaskPriority } from "@/lib/domain/types";
 
 interface AddTaskModalProps {
@@ -43,80 +50,90 @@ export function AddTaskModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Add Preparation Milestone">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-1">
-          <label htmlFor="task-title" className="text-xs text-slate-300">
-            Milestone Task Description
-          </label>
-          <Input
-            id="task-title"
-            type="text"
-            placeholder="e.g. Schedule final audio check with sound engineer"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogContent className="sm:max-w-md bg-popover text-popover-foreground border-border shadow-xl">
+        <DialogHeader>
+          <DialogTitle className="text-lg font-bold text-foreground">
+            Add Preparation Milestone
+          </DialogTitle>
+        </DialogHeader>
 
-        <div className="grid grid-cols-2 gap-2">
-          <div className="space-y-1">
-            <label htmlFor="task-phase" className="text-xs text-slate-300">
-              Phase
-            </label>
-            <select
-              id="task-phase"
-              value={phase}
-              onChange={(e) => setPhase(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-400"
-            >
-              {PHASES.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
+        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+          <div className="space-y-1.5">
+            <Label htmlFor="task-title" className="text-xs font-semibold text-foreground">
+              Milestone Task Description
+            </Label>
+            <Input
+              id="task-title"
+              type="text"
+              placeholder="e.g. Schedule final audio check with sound engineer"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              className="text-xs"
+            />
           </div>
 
-          <div className="space-y-1">
-            <label htmlFor="task-priority" className="text-xs text-slate-300">
-              Priority
-            </label>
-            <select
-              id="task-priority"
-              value={priority}
-              onChange={(e) => setPriority(e.target.value as TaskPriority)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-400"
-            >
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="task-phase" className="text-xs font-semibold text-foreground">
+                Phase
+              </Label>
+              <select
+                id="task-phase"
+                value={phase}
+                onChange={(e) => setPhase(e.target.value)}
+                className="w-full bg-background border border-input rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
+              >
+                {PHASES.map((p) => (
+                  <option key={p} value={p} className="bg-popover text-popover-foreground">
+                    {p}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="task-priority" className="text-xs font-semibold text-foreground">
+                Priority
+              </Label>
+              <select
+                id="task-priority"
+                value={priority}
+                onChange={(e) => setPriority(e.target.value as TaskPriority)}
+                className="w-full bg-background border border-input rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
+              >
+                <option value="high" className="bg-popover text-popover-foreground">High</option>
+                <option value="medium" className="bg-popover text-popover-foreground">Medium</option>
+                <option value="low" className="bg-popover text-popover-foreground">Low</option>
+              </select>
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-1">
-          <label htmlFor="task-due-date" className="text-xs text-slate-300">
-            Due Date
-          </label>
-          <Input
-            id="task-due-date"
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            required
-          />
-        </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="task-due-date" className="text-xs font-semibold text-foreground">
+              Due Date
+            </Label>
+            <Input
+              id="task-due-date"
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              required
+              className="text-xs"
+            />
+          </div>
 
-        <div className="pt-3 border-t border-slate-800 flex justify-end gap-2">
-          <Button type="button" variant="ghost" size="sm" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button type="submit" variant="default" size="sm">
-            Add Milestone
-          </Button>
-        </div>
-      </form>
-    </Modal>
+          <DialogFooter className="pt-3 border-t border-border flex justify-end gap-2">
+            <Button type="button" variant="ghost" size="sm" onClick={onClose} className="cursor-pointer">
+              Cancel
+            </Button>
+            <Button type="submit" variant="default" size="sm" className="cursor-pointer shadow-xs font-semibold">
+              Add Milestone
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

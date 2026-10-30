@@ -18,10 +18,10 @@ export function IdeasGrid({ currentEvent, onAddIdeaToPlan }: IdeasGridProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-bold text-white tracking-tight">
+        <h2 className="text-lg font-bold text-foreground tracking-tight">
           Personalized Event Concepts & Ideas
         </h2>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-muted-foreground">
           Tailored specifically for {EVENT_TYPE_LABELS[currentEvent.event.eventType]} in{" "}
           {currentEvent.event.city}. Add any idea directly to your plan.
         </p>
@@ -31,33 +31,33 @@ export function IdeasGrid({ currentEvent, onAddIdeaToPlan }: IdeasGridProps) {
         {currentEvent.ideas.map((idea) => (
           <Card
             key={idea.id}
-            className="p-6 flex flex-col justify-between space-y-4 border border-indigo-500/20 hover:border-indigo-500/40 transition"
+            className="p-6 flex flex-col justify-between space-y-4 border-border/80 bg-card hover:border-indigo-500/40 hover:shadow-md transition-all duration-200"
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Badge variant="indigo" className="text-[10px] uppercase tracking-wider">
+                <Badge variant="indigo" className="text-[10px] uppercase font-bold tracking-wider">
                   {idea.category}
                 </Badge>
-                <span className="text-[10px] text-slate-400 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-amber-400" />
+                <span className="text-[10px] text-muted-foreground flex items-center gap-1 font-medium">
+                  <Sparkles className="w-3 h-3 text-amber-500 dark:text-amber-400" />
                   {idea.source === "ai" ? "GenAI Crafted" : "Curated Theme"}
                 </span>
               </div>
-              <h3 className="text-base font-bold text-white">{idea.title}</h3>
-              <p className="text-xs text-slate-300 leading-relaxed">{idea.description}</p>
+              <h3 className="text-base font-bold text-foreground">{idea.title}</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">{idea.description}</p>
               {idea.estimatedInr && (
-                <div className="text-xs font-semibold text-amber-300 pt-1">
+                <div className="text-xs font-semibold text-amber-600 dark:text-amber-300 pt-1">
                   Estimated Impact: ~{formatInr(idea.estimatedInr)}
                 </div>
               )}
             </div>
 
-            <div className="pt-3 border-t border-slate-800 flex justify-end">
+            <div className="pt-3 border-t border-border/80 flex justify-end">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => onAddIdeaToPlan(idea)}
-                className="text-indigo-200 border-indigo-500/40 hover:bg-indigo-600/30"
+                className="cursor-pointer gap-1.5 font-medium shadow-xs"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add to Tasks & Budget</span>

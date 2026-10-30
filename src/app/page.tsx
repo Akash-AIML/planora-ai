@@ -18,6 +18,7 @@ import type {
   EventIdea,
   EventType,
   ReplanProposal,
+  ShortlistEntry,
   ShortlistStatus,
   Task,
   TaskStatus,
@@ -35,6 +36,11 @@ import {
   getSampleInitialEvent,
 } from "@/lib/domain/storage";
 import { formatInr } from "@/lib/utils";
+
+// UI Components
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 // Layout & Modular Dashboard Components
 import { Navbar } from "@/components/layout/Navbar";
@@ -248,41 +254,39 @@ export default function PlanoraApp() {
     showToast("Milestone task added.");
   };
 
-  // Shortlist Action
+  // Vendor Shortlist Actions
   const handleToggleShortlist = (vendorId: string, status: ShortlistStatus = "shortlisted") => {
     updateCurrentEvent((prev) => {
-      const existingIndex = prev.shortlist.findIndex((s) => s.vendorId === vendorId);
-      let nextShortlist = [...prev.shortlist];
-      if (existingIndex >= 0) {
-        if (nextShortlist[existingIndex].status === status) {
-          nextShortlist = nextShortlist.filter((s) => s.vendorId !== vendorId);
-          showToast("Vendor removed from shortlist.");
-        } else {
-          nextShortlist[existingIndex] = { ...nextShortlist[existingIndex], status };
-          showToast(`Vendor status updated to ${status}.`);
-        }
-      } else {
-        nextShortlist.push({
-          eventId: prev.event.id,
-          vendorId,
-          status,
-          quotedInr: null,
-          notes: "",
-        });
-        showToast("Vendor added to shortlist!");
+      const exists = prev.shortlist.some((s) => s.vendorId === vendorId);
+      if (exists) {
+        return {
+          ...prev,
+          shortlist: prev.shortlist.filter((s) => s.vendorId !== vendorId),
+        };
       }
-      return { ...prev, shortlist: nextShortlist };
+      const newEntry: ShortlistEntry = {
+        eventId: prev.event.id,
+        vendorId,
+        status,
+        quotedInr: null,
+        notes: "",
+      };
+      return {
+        ...prev,
+        shortlist: [...prev.shortlist, newEntry],
+      };
     });
+    showToast("Vendor shortlist updated.");
   };
 
-  // Add Idea to Tasks & Budget
+  // Personalized Idea Actions
   const handleAddIdeaToPlan = (idea: EventIdea) => {
     updateCurrentEvent((prev) => {
       const newTask: Task = {
         id: `idea-task-${Date.now()}`,
         eventId: prev.event.id,
-        title: `Implement: ${idea.title}`,
-        phase: "3 months out",
+        title: `Coordinate: ${idea.title}`,
+        phase: "1 month out",
         dueDate: prev.event.eventDate,
         status: "todo",
         priority: "medium",
@@ -290,30 +294,33 @@ export default function PlanoraApp() {
         sortOrder: prev.tasks.length,
       };
 
-      const nextBudget = [...prev.budgetItems];
-      if (idea.estimatedInr && idea.estimatedInr > 0) {
-        nextBudget.push({
-          id: `idea-budget-${Date.now()}`,
-          eventId: prev.event.id,
-          category: idea.category,
-          label: idea.title,
-          plannedInr: idea.estimatedInr,
-          actualInr: null,
-          notes: `Added from personalized idea: ${idea.description}`,
-          sortOrder: prev.budgetItems.length,
-        });
+      let newBudgetItems = prev.budgetItems;
+      if (idea.estimatedInr) {
+        newBudgetItems = [
+          ...newBudgetItems,
+          {
+            id: `idea-budget-${Date.now()}`,
+            eventId: prev.event.id,
+            category: idea.category,
+            label: idea.title,
+            plannedInr: idea.estimatedInr,
+            actualInr: null,
+            notes: `Added from idea concept: ${idea.title}`,
+            sortOrder: prev.budgetItems.length,
+          },
+        ];
       }
 
       return {
         ...prev,
         tasks: [...prev.tasks, newTask],
-        budgetItems: nextBudget,
+        budgetItems: newBudgetItems,
       };
     });
-    showToast(`Added "${idea.title}" to plan tasks and budget!`);
+    showToast(`Added "${idea.title}" concepts to tasks and budget!`);
   };
 
-  // Exports
+  // Export Document & JSON Actions
   const handleDownloadExport = () => {
     if (!currentEvent) return;
     const exportData = buildPlanoraExport(currentEvent);
@@ -326,17 +333,18 @@ export default function PlanoraApp() {
     a.download = `planora-${currentEvent.event.title.toLowerCase().replace(/\s+/g, "-")}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    showToast("Plan exported as JSON file.");
+    showToast("Planora JSON specification downloaded!");
   };
 
   const handleCopyMarkdown = async () => {
     if (!currentEvent) return;
     const text = `# ${currentEvent.event.title}
-**Event Type:** ${currentEvent.event.eventType} | **City:** ${currentEvent.event.city} | **Date:** ${currentEvent.event.eventDate}
-**Guests:** ${currentEvent.event.guestCount} | **Total Budget:** ₹${currentEvent.event.budgetInr.toLocaleString("en-IN")}
-**Planned Spend:** ₹${currentEvent.totals.plannedInr.toLocaleString("en-IN")} | **Actual Spent:** ₹${currentEvent.totals.actualInr.toLocaleString("en-IN")}
+**Event Type:** ${currentEvent.event.eventType}
+**Date:** ${currentEvent.event.eventDate} | **City:** ${currentEvent.event.city} | **Guests:** ${currentEvent.event.guestCount}
+**Total Budget:** ₹${currentEvent.event.budgetInr.toLocaleString("en-IN")}
+**Planned Spend:** ₹${currentEvent.totals.plannedInr.toLocaleString("en-IN")} (${currentEvent.totals.remainingInr >= 0 ? `Buffer: ₹${currentEvent.totals.remainingInr.toLocaleString("en-IN")}` : `Over Budget: ₹${Math.abs(currentEvent.totals.remainingInr).toLocaleString("en-IN")}`})
 
-## Budget Breakdown
+## Budget Allocations
 ${currentEvent.budgetItems.map((b) => `- ${b.category} (${b.label}): Planned ₹${b.plannedInr.toLocaleString("en-IN")}${b.actualInr ? ` | Actual ₹${b.actualInr.toLocaleString("en-IN")}` : ""}`).join("\n")}
 
 ## Key Milestones (${currentEvent.tasks.filter((t) => t.status === "done").length}/${currentEvent.tasks.length} Completed)
@@ -369,15 +377,15 @@ ${currentEvent.tasks.map((t) => `- [${t.status === "done" ? "x" : " "}] ${t.titl
   ];
 
   return (
-    <div className="min-h-screen text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200">
+    <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-amber-500/25 selection:text-foreground transition-colors duration-200">
       {toast && (
         <div
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-900/95 border border-amber-500/40 text-amber-300 shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-3 duration-200"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl bg-popover text-popover-foreground border border-border shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-3 duration-200"
         >
-          <Sparkles className="w-5 h-5 text-amber-400 shrink-0 animate-spin" />
-          <span className="text-sm font-medium">{toast}</span>
+          <Sparkles className="w-5 h-5 text-amber-500 dark:text-amber-400 shrink-0 animate-spin" />
+          <span className="text-sm font-semibold">{toast}</span>
         </div>
       )}
 
@@ -412,7 +420,7 @@ ${currentEvent.tasks.map((t) => `- [${t.status === "done" ? "x" : " "}] ${t.titl
             <div
               role="tablist"
               aria-label="Event Sections"
-              className="flex overflow-x-auto border-b border-slate-800 gap-1 pb-1 no-print"
+              className="flex overflow-x-auto border-b border-border/80 gap-1.5 pb-1 no-print"
             >
               {tabs.map((tab) => {
                 const Icon = tab.icon;
@@ -427,11 +435,11 @@ ${currentEvent.tasks.map((t) => `- [${t.status === "done" ? "x" : " "}] ${t.titl
                     onClick={() => setActiveTab(tab.id as typeof activeTab)}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
                       isActive
-                        ? "bg-slate-800 text-amber-300 border border-slate-700 shadow-sm"
-                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/50"
+                        ? "bg-muted text-foreground border border-border shadow-xs"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                     }`}
                   >
-                    <Icon className={`w-4 h-4 ${isActive ? "text-amber-400" : "text-slate-500"}`} />
+                    <Icon className={`w-4 h-4 ${isActive ? "text-amber-500 dark:text-amber-400" : "text-muted-foreground"}`} />
                     <span>{tab.label}</span>
                   </button>
                 );
@@ -453,84 +461,83 @@ ${currentEvent.tasks.map((t) => `- [${t.status === "done" ? "x" : " "}] ${t.titl
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Immediate Action Tasks */}
-                  <div className="glass-panel rounded-2xl p-6 space-y-4">
+                  <Card className="p-6 space-y-4 border-border/80 bg-card shadow-xs">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-semibold text-white uppercase tracking-wider flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-indigo-400" />
+                      <h3 className="text-sm font-bold text-foreground uppercase tracking-wider flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
                         Upcoming Priority Milestones
                       </h3>
-                      <button
-                        type="button"
+                      <Button
+                        variant="ghost"
+                        size="xs"
                         onClick={() => setActiveTab("timeline")}
-                        className="text-xs text-indigo-400 hover:underline cursor-pointer"
+                        className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 cursor-pointer font-semibold"
                       >
                         All Tasks ({currentEvent.tasks.length}) →
-                      </button>
+                      </Button>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-2.5">
                       {currentEvent.tasks.slice(0, 5).map((task) => (
                         <button
                           key={task.id}
                           type="button"
                           onClick={() => handleCycleTaskStatus(task.id)}
                           aria-label={`Cycle status for ${task.title}. Currently ${task.status}`}
-                          className="w-full text-left flex items-center justify-between p-3 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 transition cursor-pointer"
+                          className="w-full text-left flex items-center justify-between p-3 rounded-xl bg-muted/40 hover:bg-muted/80 border border-border/80 transition cursor-pointer"
                         >
                           <div className="flex items-center gap-3">
                             <span
                               aria-hidden="true"
-                              className={`w-5 h-5 rounded-md flex items-center justify-center border transition ${
+                              className={`w-5 h-5 rounded-md flex items-center justify-center border transition shrink-0 ${
                                 task.status === "done"
-                                  ? "bg-emerald-500 border-emerald-500 text-slate-950"
+                                  ? "bg-emerald-500 border-emerald-500 text-white dark:text-slate-950"
                                   : task.status === "doing"
-                                    ? "bg-indigo-500/20 border-indigo-400 text-indigo-300"
-                                    : "border-slate-700 text-transparent"
+                                    ? "bg-indigo-500/20 border-indigo-400 text-indigo-600 dark:text-indigo-300"
+                                    : "border-input bg-background text-transparent"
                               }`}
                             >
                               <Check className="w-3.5 h-3.5 stroke-[3]" />
                             </span>
                             <div>
                               <p
-                                className={`text-xs font-medium ${
-                                  task.status === "done" ? "line-through text-slate-500" : "text-slate-200"
+                                className={`text-xs font-semibold ${
+                                  task.status === "done" ? "line-through text-muted-foreground" : "text-foreground"
                                 }`}
                               >
                                 {task.title}
                               </p>
-                              <span className="text-[10px] text-slate-400">
+                              <span className="text-[10px] text-muted-foreground">
                                 {task.phase} · Due {task.dueDate}
                               </span>
                             </div>
                           </div>
-                          <span
-                            className={`text-[10px] px-2 py-0.5 rounded-full uppercase font-semibold ${
-                              task.priority === "high"
-                                ? "bg-rose-500/10 text-rose-400 border border-rose-500/20"
-                                : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                            }`}
+                          <Badge
+                            variant={task.priority === "high" ? "rose" : "amber"}
+                            className="text-[10px] uppercase font-bold"
                           >
                             {task.priority}
-                          </span>
+                          </Badge>
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </Card>
 
                   {/* Top Matched Vendors */}
-                  <div className="glass-panel rounded-2xl p-6 space-y-4">
+                  <Card className="p-6 space-y-4 border-border/80 bg-card shadow-xs">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-semibold text-white uppercase tracking-wider flex items-center gap-2">
-                        <Building className="w-4 h-4 text-emerald-400" />
+                      <h3 className="text-sm font-bold text-foreground uppercase tracking-wider flex items-center gap-2">
+                        <Building className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                         Top Matched Vendors
                       </h3>
-                      <button
-                        type="button"
+                      <Button
+                        variant="ghost"
+                        size="xs"
                         onClick={() => setActiveTab("vendors")}
-                        className="text-xs text-emerald-400 hover:underline cursor-pointer"
+                        className="text-xs text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 cursor-pointer font-semibold"
                       >
                         Explore Vendors ({DEMO_VENDORS.length}) →
-                      </button>
+                      </Button>
                     </div>
 
                     <div className="space-y-3">
@@ -541,68 +548,67 @@ ${currentEvent.tasks.map((t) => `- [${t.status === "done" ? "x" : " "}] ${t.titl
                         return (
                           <div
                             key={item.vendor.id}
-                            className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition space-y-2"
+                            className="p-3.5 rounded-xl bg-muted/40 border border-border/80 hover:border-border transition space-y-2"
                           >
                             <div className="flex items-center justify-between">
                               <div>
-                                <h4 className="text-sm font-bold text-white">{item.vendor.name}</h4>
-                                <span className="text-[11px] text-amber-400">
+                                <h4 className="text-sm font-bold text-foreground">{item.vendor.name}</h4>
+                                <span className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
                                   {VENDOR_CATEGORY_LABELS[item.vendor.category]} ·{" "}
                                   {item.vendor.cities.join(", ")}
                                 </span>
                               </div>
                               <div className="text-right">
-                                <div className="text-xs font-bold text-white">
+                                <div className="text-xs font-bold text-foreground">
                                   {formatInr(item.estimateInr)}
                                 </div>
-                                <div className="text-[10px] text-slate-400">
+                                <div className="text-[10px] text-muted-foreground">
                                   Score: {item.score} pts
                                 </div>
                               </div>
                             </div>
                             <div className="flex items-center justify-between pt-1">
-                              <span className="text-[10px] text-emerald-400">
+                              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
                                 {item.reasons[0] ?? "Recommended match"}
                               </span>
-                              <button
+                              <Button
                                 type="button"
+                                variant={isShortlisted ? "amber" : "outline"}
+                                size="xs"
                                 onClick={() => handleToggleShortlist(item.vendor.id)}
-                                className={`text-xs px-2.5 py-1 rounded-lg font-medium transition cursor-pointer ${
-                                  isShortlisted
-                                    ? "bg-amber-500 text-slate-950 font-bold"
-                                    : "bg-slate-800 hover:bg-slate-700 text-slate-300"
-                                }`}
+                                className="cursor-pointer font-semibold"
                               >
                                 {isShortlisted ? "★ Shortlisted" : "+ Shortlist"}
-                              </button>
+                              </Button>
                             </div>
                           </div>
                         );
                       })}
                     </div>
-                  </div>
+                  </Card>
                 </div>
 
                 {/* Replanner Banner */}
-                <div className="p-6 rounded-2xl bg-gradient-to-r from-indigo-950/60 via-purple-950/40 to-slate-900 border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="p-6 rounded-2xl bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-amber-500/5 dark:from-indigo-950/60 dark:via-purple-950/40 dark:to-slate-900 border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
                   <div className="space-y-1">
-                    <h4 className="text-base font-bold text-white flex items-center gap-2">
-                      <Sliders className="w-4 h-4 text-indigo-400" />
+                    <h4 className="text-base font-bold text-foreground flex items-center gap-2">
+                      <Sliders className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
                       Need to Adjust Your Budget or Scope?
                     </h4>
-                    <p className="text-xs text-slate-300 max-w-xl">
+                    <p className="text-xs text-muted-foreground max-w-xl">
                       Planora&apos;s deterministic replanning engine protects essential category floors
                       while intelligently reducing flexible lines. See exact before-and-after diffs
                       before approving changes.
                     </p>
                   </div>
-                  <button
+                  <Button
                     type="button"
+                    variant="default"
                     onClick={() => setActiveTab("replan")}
-                    className="shrink-0 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition cursor-pointer"
+                    className="shrink-0 cursor-pointer shadow-sm font-semibold"
                   >
                     Open Replanner →
-                  </button>
+                  </Button>
                 </div>
               </div>
             )}
@@ -661,15 +667,16 @@ ${currentEvent.tasks.map((t) => `- [${t.status === "done" ? "x" : " "}] ${t.titl
           </div>
         ) : (
           <div className="text-center py-20">
-            <h2 className="text-lg font-bold text-white">No Active Plan</h2>
-            <p className="text-xs text-slate-400 mt-1">Create a new event brief to get started.</p>
-            <button
+            <h2 className="text-lg font-bold text-foreground">No Active Plan</h2>
+            <p className="text-xs text-muted-foreground mt-1">Create a new event brief to get started.</p>
+            <Button
               type="button"
+              variant="amber"
               onClick={() => setIsCreating(true)}
-              className="mt-4 px-4 py-2 rounded-lg bg-amber-500 text-slate-950 font-bold text-xs"
+              className="mt-4 cursor-pointer font-bold"
             >
               Plan an Event Now
-            </button>
+            </Button>
           </div>
         )}
       </main>

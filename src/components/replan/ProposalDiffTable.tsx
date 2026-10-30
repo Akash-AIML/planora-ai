@@ -2,6 +2,14 @@
 
 import React from "react";
 import { formatInr } from "@/lib/utils";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
 import type { BudgetChange } from "@/lib/domain/types";
 
 interface ProposalDiffTableProps {
@@ -11,7 +19,7 @@ interface ProposalDiffTableProps {
 export function ProposalDiffTable({ changes }: ProposalDiffTableProps) {
   if (changes.length === 0) {
     return (
-      <p className="text-xs text-slate-400">
+      <p className="text-xs text-muted-foreground">
         No cuts are required. Target budget is sufficient to cover current planned spend.
       </p>
     );
@@ -19,35 +27,35 @@ export function ProposalDiffTable({ changes }: ProposalDiffTableProps) {
 
   return (
     <div className="space-y-2">
-      <span className="text-xs font-semibold text-slate-200">
+      <span className="text-xs font-semibold text-foreground">
         Proposed Adjustments by Line Item:
       </span>
-      <div className="overflow-x-auto rounded-xl border border-slate-800">
-        <table className="w-full text-left text-xs border-collapse">
-          <thead>
-            <tr className="bg-slate-900/90 text-slate-400 font-semibold border-b border-slate-800">
-              <th className="py-2.5 px-4">Line Item</th>
-              <th className="py-2.5 px-4">Category</th>
-              <th className="py-2.5 px-4">Current Spend</th>
-              <th className="py-2.5 px-4">Proposed Spend</th>
-              <th className="py-2.5 px-4">Adjustment</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-800/60">
+      <div className="overflow-x-auto rounded-xl border border-border bg-card">
+        <Table className="text-xs">
+          <TableHeader>
+            <TableRow className="bg-muted/60 text-muted-foreground font-semibold border-b border-border">
+              <TableHead className="py-2.5 px-4 font-bold text-muted-foreground">Line Item</TableHead>
+              <TableHead className="py-2.5 px-4 font-bold text-muted-foreground">Category</TableHead>
+              <TableHead className="py-2.5 px-4 font-bold text-muted-foreground">Current Spend</TableHead>
+              <TableHead className="py-2.5 px-4 font-bold text-muted-foreground">Proposed Spend</TableHead>
+              <TableHead className="py-2.5 px-4 font-bold text-muted-foreground">Adjustment</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {changes.map((change) => {
               const cut = change.fromInr - change.toInr;
               return (
-                <tr key={change.itemId} className="hover:bg-slate-850/40">
-                  <td className="py-2.5 px-4 font-medium text-white">{change.label}</td>
-                  <td className="py-2.5 px-4 text-slate-400">{change.category}</td>
-                  <td className="py-2.5 px-4 text-slate-300">{formatInr(change.fromInr)}</td>
-                  <td className="py-2.5 px-4 font-bold text-amber-300">{formatInr(change.toInr)}</td>
-                  <td className="py-2.5 px-4 font-bold text-rose-400">-{formatInr(cut)}</td>
-                </tr>
+                <TableRow key={change.itemId} className="hover:bg-muted/40 transition">
+                  <TableCell className="py-2.5 px-4 font-medium text-foreground">{change.label}</TableCell>
+                  <TableCell className="py-2.5 px-4 text-muted-foreground">{change.category}</TableCell>
+                  <TableCell className="py-2.5 px-4 text-muted-foreground">{formatInr(change.fromInr)}</TableCell>
+                  <TableCell className="py-2.5 px-4 font-bold text-amber-600 dark:text-amber-300">{formatInr(change.toInr)}</TableCell>
+                  <TableCell className="py-2.5 px-4 font-bold text-rose-600 dark:text-rose-400">-{formatInr(cut)}</TableCell>
+                </TableRow>
               );
             })}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
