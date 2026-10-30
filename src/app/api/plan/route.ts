@@ -4,9 +4,14 @@ import { parseEventBrief } from "@/lib/domain/extraction";
 import { generateIdeas } from "@/lib/domain/ideas";
 import type { EventType, ExtractionResult, EventIdea } from "@/lib/domain/types";
 
-const RequestSchema = z.object({
-  brief: z.string().min(1).max(5000),
-});
+const RequestSchema = z
+  .object({
+    brief: z.string().min(1).max(5000).optional(),
+    prompt: z.string().min(1).max(5000).optional(),
+  })
+  .refine((d) => Boolean(d.brief?.trim() || d.prompt?.trim()), {
+    message: "Either brief or prompt is required.",
+  });
 
 const GeminiExtractionSchema = z.object({
   title: z.string(),
@@ -36,7 +41,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
     }
 
-    const { brief } = parsedInput.data;
+    const brief = (parsedInput.data.brief || parsedInput.data.prompt)!.trim();
     const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 
     if (apiKey) {
