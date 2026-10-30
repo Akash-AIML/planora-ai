@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { SECURITY_CONFIG } from "@/lib/constants/config";
 
 export interface SessionPayload {
   sessionId: string;
@@ -17,8 +18,8 @@ export interface SessionVerificationResult {
 
 // In-memory or fallback secret when SESSION_SECRET env is not explicitly set
 const DEFAULT_SECRET = process.env.SESSION_SECRET || "planora-ai-secure-salt-h4ck2sk1ll-2026-fallback-secret-key-32b";
-const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
-const INACTIVITY_TIMEOUT_MS = 2 * 60 * 60 * 1000; // 2 hours
+const SESSION_TTL_MS = SECURITY_CONFIG.SESSION_TTL_MS;
+const INACTIVITY_TIMEOUT_MS = SECURITY_CONFIG.SESSION_INACTIVITY_MS;
 
 /**
  * Computes a privacy-preserving fingerprint from client headers and IP.

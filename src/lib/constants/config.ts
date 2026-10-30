@@ -9,7 +9,6 @@ export const SECURITY_CONFIG = {
   RATE_LIMIT_WINDOW_MS: 60 * 1000, // 1 minute
   SESSION_TTL_MS: 24 * 60 * 60 * 1000, // 24 hours
   SESSION_INACTIVITY_MS: 2 * 60 * 60 * 1000, // 2 hours
-  DEFAULT_SESSION_SECRET: "planora-ai-secure-salt-h4ck2sk1ll-2026-fallback-secret-key-32b",
 } as const;
 
 export const LLM_CONFIG = {
@@ -24,14 +23,7 @@ export const LLM_CONFIG = {
   ] as const,
 } as const;
 
-export const BUDGET_FLOORS = {
-  VENUE_FLOOR_RATIO: 0.70, // 70% of planned allocation is strictly protected
-  CATERING_FLOOR_RATIO: 0.65, // 65% protected
-  GENERAL_FLOOR_RATIO: 0.15, // 15% minimum floor for discretionary lines
-} as const;
-
 export const UI_CONFIG = {
-  DEFAULT_EVENT_CITY: "Jaipur",
   TOAST_DURATION_MS: 3500,
   MAX_BRIEF_LENGTH: 5000,
 } as const;
