@@ -160,7 +160,7 @@ export async function extractPlanWithLLM(
       const validated = GeminiExtractionSchema.safeParse(parsedJson);
 
       if (!validated.success) {
-        console.warn(`[LLM SERVICE] Model ${model} returned invalid schema:`, validated.error.issues);
+        console.warn("[LLM SERVICE] Model", model, "returned invalid schema:", validated.error.issues);
         continue;
       }
 
@@ -199,7 +199,7 @@ export async function extractPlanWithLLM(
         source: `llm (${model})`,
       };
     } catch (modelErr) {
-      console.warn(`[LLM SERVICE] Request to ${model} failed:`, modelErr instanceof Error ? modelErr.message : modelErr);
+      console.warn("[LLM SERVICE] Request to", model, "failed:", modelErr instanceof Error ? modelErr.message : modelErr);
     }
   }
 
