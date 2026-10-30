@@ -5,13 +5,16 @@ import type {
   Task,
   EventIdea,
   ShortlistEntry,
-  PlanoraExport,
 } from "./types";
 import { allocateBudget, calculateBudgetTotals } from "./budget";
 import { generateTimeline } from "./timeline";
 import { generateIdeas } from "./ideas";
-import { DEMO_VENDORS } from "@/lib/data/demo-vendors";
 import { sanitizeString } from "@/lib/security/sanitization";
+import { getSampleInitialEvent } from "./seeds";
+
+// Re-export domain helpers for seamless module integration
+export { getSampleInitialEvent } from "./seeds";
+export { buildPlanoraExport, generateEventMarkdown } from "./export";
 
 const STORAGE_KEY = "planora_ai_events_v1";
 const ACTIVE_KEY = "planora_ai_active_id";
@@ -167,7 +170,6 @@ export function loadAllEvents(): EventDetail[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      // Seed with sample initial plan if empty
       const initial = getSampleInitialEvent();
       saveAllEvents([initial]);
       return [initial];
@@ -209,79 +211,4 @@ export function setActiveEventId(id: string): void {
   } catch (err) {
     console.error("Failed to set active event ID in localStorage:", err);
   }
-}
-
-export function buildPlanoraExport(detail: EventDetail): PlanoraExport {
-  const vendorMap = new Map(DEMO_VENDORS.map((v) => [v.id, v]));
-  const shortlistedVendors = (detail.shortlist ?? [])
-    .map((entry) => {
-      const vendor = vendorMap.get(entry.vendorId);
-      return vendor ? { entry, vendor } : null;
-    })
-    .filter((item): item is { entry: ShortlistEntry; vendor: typeof DEMO_VENDORS[0] } => item !== null);
-
-  return {
-    exportedAt: new Date().toISOString(),
-    app: "Planora AI",
-    event: detail.event,
-    budget: {
-      items: detail.budgetItems ?? [],
-      totals: detail.totals,
-    },
-    tasks: detail.tasks ?? [],
-    ideas: detail.ideas ?? [],
-    vendors: shortlistedVendors,
-    disclaimer:
-      "All vendor listings and price estimates are illustrative demo figures. Verify live availability and commercial quotes before signing contracts.",
-  };
-}
-
-export function getSampleInitialEvent(): EventDetail {
-  const detail = createNewEventDetail({
-    title: "Royal Heritage Wedding in Jaipur",
-    eventType: "wedding",
-    city: "Jaipur",
-    eventDate: "2026-11-28",
-    guestCount: 200,
-    budgetInr: 1500000,
-    preferences: ["heritage", "traditional", "outdoor", "vegetarian", "luxury"],
-    notes: "A grand 3-day royal celebration with intimate folk musical gatherings and sustainable decor.",
-  });
-
-  // Pre-mark a couple tasks as done/doing to show realistic progress
-  if (detail.tasks.length > 2) {
-    detail.tasks[0].status = "done";
-    detail.tasks[1].status = "doing";
-  }
-
-  // Pre-seed a shortlist entry
-  detail.shortlist.push({
-    eventId: detail.event.id,
-    vendorId: "venue-amber-courtyard",
-    status: "shortlisted",
-    quotedInr: 180000,
-    notes: "Contacted for sandstone archway setup and courtyard dinner.",
-  });
-
-  return detail;
-}
-
-/**
- * Builds a clean Markdown document summary from an EventDetail for copying or documentation
- */
-export function generateEventMarkdown(detail: EventDetail): string {
-  const completedTasks = (detail.tasks ?? []).filter((t) => t.status === "done").length;
-  const totalTasks = (detail.tasks ?? []).length;
-
-  return `# ${detail.event.title}
-**Event Type:** ${detail.event.eventType}
-**Date:** ${detail.event.eventDate} | **City:** ${detail.event.city} | **Guests:** ${detail.event.guestCount}
-**Total Budget:** ₹${detail.event.budgetInr.toLocaleString("en-IN")}
-**Planned Spend:** ₹${detail.totals.plannedInr.toLocaleString("en-IN")}
-
-## Budget Allocations
-${(detail.budgetItems ?? []).map((b) => `- ${b.category} (${b.label}): Planned ₹${b.plannedInr.toLocaleString("en-IN")}`).join("\n")}
-
-## Key Milestones (${completedTasks}/${totalTasks} Completed)
-${(detail.tasks ?? []).map((t) => `- [${t.status === "done" ? "x" : " "}] ${t.title} (${t.phase})`).join("\n")}`;
 }

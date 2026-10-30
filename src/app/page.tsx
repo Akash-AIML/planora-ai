@@ -1,23 +1,15 @@
 "use client";
 
 import React from "react";
-import {
-  Sparkles,
-  IndianRupee,
-  Calendar,
-  Building,
-  Star,
-  Sliders,
-  FileText,
-} from "lucide-react";
+import { Sparkles } from "lucide-react";
+import { usePlanoraApp } from "@/lib/hooks/usePlanoraApp";
 
-import { usePlanoraApp, type DashboardTab } from "@/lib/hooks/usePlanoraApp";
-
-// Modular Components
+// Modular Layout Components
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CreationWizard } from "@/components/event/CreationWizard";
 import { EventRibbon } from "@/components/dashboard/EventRibbon";
+import { DashboardTabsNav } from "@/components/dashboard/DashboardTabsNav";
 import { OverviewTabPanel } from "@/components/dashboard/OverviewTabPanel";
 import { BudgetMatrixTable } from "@/components/budget/BudgetMatrixTable";
 import { AddBudgetItemModal } from "@/components/budget/AddBudgetItemModal";
@@ -29,19 +21,9 @@ import { BudgetReplanner } from "@/components/replan/BudgetReplanner";
 import { ExportPrintView } from "@/components/export/ExportPrintView";
 import { Button } from "@/components/ui/button";
 
-const DASHBOARD_TABS: Array<{ id: DashboardTab; label: string; icon: React.ElementType }> = [
-  { id: "overview", label: "Overview", icon: Sparkles },
-  { id: "budget", label: "Budget & Expenses", icon: IndianRupee },
-  { id: "timeline", label: "Preparation Timeline", icon: Calendar },
-  { id: "vendors", label: "Vendors", icon: Building },
-  { id: "ideas", label: "Personalized Ideas", icon: Star },
-  { id: "replan", label: "Budget Replanner", icon: Sliders },
-  { id: "export", label: "Export & Print", icon: FileText },
-];
-
 /**
  * PlanoraApp — Main Application Orchestrator
- * Clean, declarative layout coordinating navigation, tabs, and modals.
+ * Declarative, single-responsibility layout coordinating navigation, tabs, and modals.
  */
 export default function PlanoraApp() {
   const {
@@ -102,34 +84,10 @@ export default function PlanoraApp() {
             />
 
             {/* Dashboard Tabs Bar */}
-            <div
-              role="tablist"
-              aria-label="Event Sections"
-              className="flex overflow-x-auto border-b border-border/80 gap-1.5 pb-1 no-print"
-            >
-              {DASHBOARD_TABS.map((tab) => {
-                const Icon = tab.icon;
-                const isActive = activeTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    role="tab"
-                    id={`tab-${tab.id}`}
-                    aria-selected={isActive}
-                    aria-controls={`panel-${tab.id}`}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
-                      isActive
-                        ? "bg-muted text-foreground border border-border shadow-xs"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                    }`}
-                  >
-                    <Icon className={`w-4 h-4 ${isActive ? "text-amber-500 dark:text-amber-400" : "text-muted-foreground"}`} />
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
-            </div>
+            <DashboardTabsNav
+              activeTab={activeTab}
+              onSelectTab={setActiveTab}
+            />
 
             {/* Tab Panels */}
             {activeTab === "overview" && (

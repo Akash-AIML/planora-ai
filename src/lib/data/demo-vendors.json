@@ -1,0 +1,779 @@
+[
+  {
+    "id": "venue-amber-courtyard",
+    "name": "The Amber Courtyard",
+    "category": "venue",
+    "cities": [
+      "Jaipur"
+    ],
+    "basePriceInr": 180000,
+    "priceUnit": "event",
+    "priceNote": "Indicative venue hire for 150 guests; catering separate.",
+    "rating": 4.8,
+    "reviewCount": 212,
+    "tags": [
+      "heritage",
+      "outdoor",
+      "grand",
+      "traditional"
+    ],
+    "description": "A restored haveli courtyard with sandstone arches and space for a lawn dinner.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "venue-sandstone-house",
+    "name": "Sandstone House",
+    "category": "venue",
+    "cities": [
+      "Jaipur"
+    ],
+    "basePriceInr": 95000,
+    "priceUnit": "event",
+    "priceNote": "Indicative day hire for up to 100 guests.",
+    "rating": 4.5,
+    "reviewCount": 86,
+    "tags": [
+      "intimate",
+      "heritage",
+      "budget",
+      "indoor"
+    ],
+    "description": "A small heritage home with a shaded terrace, best for intimate gatherings.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "venue-lakeview-pavilion",
+    "name": "Lakeview Pavilion",
+    "category": "venue",
+    "cities": [
+      "Udaipur"
+    ],
+    "basePriceInr": 220000,
+    "priceUnit": "event",
+    "priceNote": "Indicative venue hire; boat transfer quoted separately.",
+    "rating": 4.9,
+    "reviewCount": 164,
+    "tags": [
+      "destination",
+      "luxury",
+      "outdoor",
+      "grand"
+    ],
+    "description": "A lakefront lawn with a covered pavilion and sunset-facing ceremony setup.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "venue-bandra-terrace",
+    "name": "Bandra Terrace",
+    "category": "venue",
+    "cities": [
+      "Mumbai"
+    ],
+    "basePriceInr": 160000,
+    "priceUnit": "event",
+    "priceNote": "Indicative evening hire for 120 guests.",
+    "rating": 4.6,
+    "reviewCount": 143,
+    "tags": [
+      "urban",
+      "rooftop",
+      "evening",
+      "modern"
+    ],
+    "description": "A rooftop event space with skyline views and an indoor backup room.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "venue-cubbon-garden-hall",
+    "name": "Cubbon Garden Hall",
+    "category": "venue",
+    "cities": [
+      "Bengaluru"
+    ],
+    "basePriceInr": 120000,
+    "priceUnit": "event",
+    "priceNote": "Indicative venue hire for 100 guests.",
+    "rating": 4.7,
+    "reviewCount": 98,
+    "tags": [
+      "garden",
+      "sustainable",
+      "outdoor",
+      "daytime"
+    ],
+    "description": "A leafy garden hall with natural ventilation and a no-single-use-plastic policy.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "venue-mehrauli-farmhouse",
+    "name": "Mehrauli Farmhouse",
+    "category": "venue",
+    "cities": [
+      "Delhi NCR"
+    ],
+    "basePriceInr": 200000,
+    "priceUnit": "event",
+    "priceNote": "Indicative full-day hire for 200 guests.",
+    "rating": 4.4,
+    "reviewCount": 187,
+    "tags": [
+      "outdoor",
+      "grand",
+      "lawn",
+      "evening"
+    ],
+    "description": "A large farmhouse lawn with parking, generator backup and guest rooms.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "venue-koregaon-studio",
+    "name": "Koregaon Park Studio",
+    "category": "venue",
+    "cities": [
+      "Pune"
+    ],
+    "basePriceInr": 85000,
+    "priceUnit": "event",
+    "priceNote": "Indicative 6-hour hire for up to 80 guests.",
+    "rating": 4.6,
+    "reviewCount": 74,
+    "tags": [
+      "modern",
+      "indoor",
+      "budget",
+      "intimate"
+    ],
+    "description": "A minimal studio space with good acoustics and flexible lighting.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "venue-anjuna-beach-house",
+    "name": "Anjuna Beach House",
+    "category": "venue",
+    "cities": [
+      "Goa"
+    ],
+    "basePriceInr": 175000,
+    "priceUnit": "event",
+    "priceNote": "Indicative beachfront hire; sound limits apply after 10 pm.",
+    "rating": 4.8,
+    "reviewCount": 121,
+    "tags": [
+      "beach",
+      "destination",
+      "outdoor",
+      "boho"
+    ],
+    "description": "A beachfront house with a shaded deck and direct sand access.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "venue-banjara-banquet",
+    "name": "Banjara Banquet",
+    "category": "venue",
+    "cities": [
+      "Hyderabad"
+    ],
+    "basePriceInr": 130000,
+    "priceUnit": "event",
+    "priceNote": "Indicative hall hire for 180 guests.",
+    "rating": 4.3,
+    "reviewCount": 156,
+    "tags": [
+      "indoor",
+      "budget",
+      "traditional",
+      "accessible"
+    ],
+    "description": "A central banquet hall with step-free access and valet parking.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "catering-marigold",
+    "name": "Marigold Kitchens",
+    "category": "catering",
+    "cities": [
+      "Jaipur"
+    ],
+    "basePriceInr": 850,
+    "priceUnit": "plate",
+    "priceNote": "Indicative vegetarian buffet per plate; live counters extra.",
+    "rating": 4.8,
+    "reviewCount": 240,
+    "tags": [
+      "vegetarian",
+      "regional",
+      "wedding",
+      "traditional"
+    ],
+    "description": "Rajasthani and North Indian vegetarian menus with seasonal produce.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "catering-rajasthan-thali",
+    "name": "Rajasthan Thali Co.",
+    "category": "catering",
+    "cities": [
+      "Jaipur"
+    ],
+    "basePriceInr": 650,
+    "priceUnit": "plate",
+    "priceNote": "Indicative thali per plate; minimum 50 plates.",
+    "rating": 4.5,
+    "reviewCount": 132,
+    "tags": [
+      "vegetarian",
+      "budget",
+      "traditional",
+      "regional"
+    ],
+    "description": "Simple, generous thalis with dal baati, gatte and seasonal vegetables.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "catering-bombay-table",
+    "name": "Bombay Table",
+    "category": "catering",
+    "cities": [
+      "Mumbai"
+    ],
+    "basePriceInr": 1200,
+    "priceUnit": "plate",
+    "priceNote": "Indicative multi-cuisine buffet per plate.",
+    "rating": 4.7,
+    "reviewCount": 198,
+    "tags": [
+      "multi-cuisine",
+      "seafood",
+      "luxury",
+      "evening"
+    ],
+    "description": "A multi-cuisine kitchen with strong coastal and Parsi menus.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "catering-green-leaf",
+    "name": "Green Leaf Catering",
+    "category": "catering",
+    "cities": [
+      "Bengaluru"
+    ],
+    "basePriceInr": 700,
+    "priceUnit": "plate",
+    "priceNote": "Indicative vegetarian South Indian buffet per plate.",
+    "rating": 4.6,
+    "reviewCount": 110,
+    "tags": [
+      "vegetarian",
+      "sustainable",
+      "south-indian",
+      "budget"
+    ],
+    "description": "Plant-forward menus with compostable serviceware and local grains.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "catering-dilli-dawat",
+    "name": "Dilli Dawat",
+    "category": "catering",
+    "cities": [
+      "Delhi NCR"
+    ],
+    "basePriceInr": 950,
+    "priceUnit": "plate",
+    "priceNote": "Indicative North Indian buffet per plate.",
+    "rating": 4.4,
+    "reviewCount": 176,
+    "tags": [
+      "north-indian",
+      "halal",
+      "traditional",
+      "grand"
+    ],
+    "description": "Mughlai and Punjabi menus with live kebab counters.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "catering-susegad",
+    "name": "Susegad Catering",
+    "category": "catering",
+    "cities": [
+      "Goa"
+    ],
+    "basePriceInr": 1100,
+    "priceUnit": "plate",
+    "priceNote": "Indicative Goan buffet per plate; seafood subject to market rate.",
+    "rating": 4.7,
+    "reviewCount": 88,
+    "tags": [
+      "goan",
+      "seafood",
+      "outdoor",
+      "regional"
+    ],
+    "description": "Goan and Portuguese-influenced menus cooked on site.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "catering-deccan-biryani",
+    "name": "Deccan Biryani House",
+    "category": "catering",
+    "cities": [
+      "Hyderabad"
+    ],
+    "basePriceInr": 800,
+    "priceUnit": "plate",
+    "priceNote": "Indicative biryani-led buffet per plate.",
+    "rating": 4.6,
+    "reviewCount": 205,
+    "tags": [
+      "biryani",
+      "halal",
+      "regional",
+      "budget"
+    ],
+    "description": "Hyderabadi dum biryani with vegetarian and non-vegetarian menus.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "photo-frame-fold",
+    "name": "Frame & Fold",
+    "category": "photography",
+    "cities": [
+      "Pan-India"
+    ],
+    "basePriceInr": 90000,
+    "priceUnit": "event",
+    "priceNote": "Indicative two-photographer candid coverage for one day.",
+    "rating": 4.8,
+    "reviewCount": 156,
+    "tags": [
+      "candid",
+      "storytelling",
+      "wedding",
+      "travel"
+    ],
+    "description": "Documentary-style photography with a 15-day edited gallery.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "photo-studio-neel",
+    "name": "Studio Neel",
+    "category": "photography",
+    "cities": [
+      "Jaipur"
+    ],
+    "basePriceInr": 65000,
+    "priceUnit": "event",
+    "priceNote": "Indicative traditional coverage for one day.",
+    "rating": 4.5,
+    "reviewCount": 64,
+    "tags": [
+      "traditional",
+      "budget",
+      "portrait",
+      "wedding"
+    ],
+    "description": "Classic portraiture and family group photos with quick turnaround.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "photo-lightleak",
+    "name": "Lightleak Films",
+    "category": "photography",
+    "cities": [
+      "Mumbai",
+      "Pan-India"
+    ],
+    "basePriceInr": 150000,
+    "priceUnit": "event",
+    "priceNote": "Indicative photo + film team for one day.",
+    "rating": 4.9,
+    "reviewCount": 97,
+    "tags": [
+      "cinematic",
+      "video",
+      "luxury",
+      "storytelling"
+    ],
+    "description": "Cinematic films and editorial photography for large celebrations.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "photo-metro-lens",
+    "name": "Metro Lens",
+    "category": "photography",
+    "cities": [
+      "Bengaluru",
+      "Hyderabad"
+    ],
+    "basePriceInr": 75000,
+    "priceUnit": "event",
+    "priceNote": "Indicative corporate event coverage for one day.",
+    "rating": 4.4,
+    "reviewCount": 53,
+    "tags": [
+      "corporate",
+      "candid",
+      "conference",
+      "budget"
+    ],
+    "description": "Conference and corporate event coverage with same-day selects.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "decor-marigold-co",
+    "name": "Marigold & Co.",
+    "category": "decor",
+    "cities": [
+      "Jaipur"
+    ],
+    "basePriceInr": 70000,
+    "priceUnit": "event",
+    "priceNote": "Indicative floral and fabric decor for a 100-guest event.",
+    "rating": 4.7,
+    "reviewCount": 102,
+    "tags": [
+      "flowers",
+      "traditional",
+      "marigold",
+      "heritage"
+    ],
+    "description": "Seasonal marigold installations, block-print fabrics and rental furniture.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "decor-paper-lantern",
+    "name": "Paper Lantern Studio",
+    "category": "decor",
+    "cities": [
+      "Pan-India"
+    ],
+    "basePriceInr": 45000,
+    "priceUnit": "event",
+    "priceNote": "Indicative DIY-style decor kit and setup for 80 guests.",
+    "rating": 4.5,
+    "reviewCount": 71,
+    "tags": [
+      "diy",
+      "sustainable",
+      "budget",
+      "modern"
+    ],
+    "description": "Reusable paper installations and upcycled props with a low-waste setup.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "decor-ivory-stage",
+    "name": "Ivory Stage",
+    "category": "decor",
+    "cities": [
+      "Delhi NCR"
+    ],
+    "basePriceInr": 120000,
+    "priceUnit": "event",
+    "priceNote": "Indicative stage, lighting and floral package.",
+    "rating": 4.8,
+    "reviewCount": 139,
+    "tags": [
+      "luxury",
+      "modern",
+      "stage",
+      "lighting"
+    ],
+    "description": "Large-format stage design with architectural lighting and imported flowers.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "decor-goa-garden",
+    "name": "Goa Garden Decor",
+    "category": "decor",
+    "cities": [
+      "Goa"
+    ],
+    "basePriceInr": 85000,
+    "priceUnit": "event",
+    "priceNote": "Indicative beachside decor and lighting setup.",
+    "rating": 4.6,
+    "reviewCount": 58,
+    "tags": [
+      "outdoor",
+      "boho",
+      "beach",
+      "sustainable"
+    ],
+    "description": "Driftwood arches, local foliage and festoon lighting for beach venues.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "music-raag-collective",
+    "name": "Raag Collective",
+    "category": "music",
+    "cities": [
+      "Pan-India"
+    ],
+    "basePriceInr": 60000,
+    "priceUnit": "event",
+    "priceNote": "Indicative four-piece acoustic ensemble for three hours.",
+    "rating": 4.7,
+    "reviewCount": 84,
+    "tags": [
+      "live",
+      "classical",
+      "band",
+      "traditional"
+    ],
+    "description": "A flexible acoustic ensemble that moves from classical to Bollywood.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "music-dj-nimbus",
+    "name": "DJ Nimbus",
+    "category": "music",
+    "cities": [
+      "Mumbai",
+      "Pune"
+    ],
+    "basePriceInr": 35000,
+    "priceUnit": "event",
+    "priceNote": "Indicative four-hour DJ set with sound system.",
+    "rating": 4.4,
+    "reviewCount": 118,
+    "tags": [
+      "dj",
+      "evening",
+      "modern",
+      "budget"
+    ],
+    "description": "Open-format DJ with a compact sound and lighting rig.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "music-dhol-co",
+    "name": "Dhol & Co.",
+    "category": "music",
+    "cities": [
+      "Delhi NCR",
+      "Jaipur"
+    ],
+    "basePriceInr": 25000,
+    "priceUnit": "event",
+    "priceNote": "Indicative dhol team for the baraat or entrance.",
+    "rating": 4.6,
+    "reviewCount": 76,
+    "tags": [
+      "dhol",
+      "traditional",
+      "wedding",
+      "budget"
+    ],
+    "description": "A four-person dhol team with a traditional baraat repertoire.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "beauty-glow-studio",
+    "name": "Glow Studio",
+    "category": "beauty",
+    "cities": [
+      "Pan-India"
+    ],
+    "basePriceInr": 30000,
+    "priceUnit": "event",
+    "priceNote": "Indicative bridal makeup and hair for one artist.",
+    "rating": 4.8,
+    "reviewCount": 143,
+    "tags": [
+      "bridal",
+      "makeup",
+      "hair",
+      "luxury"
+    ],
+    "description": "HD bridal makeup with a trial and touch-up kit.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "beauty-mehendi-circle",
+    "name": "Mehendi Circle",
+    "category": "beauty",
+    "cities": [
+      "Jaipur",
+      "Delhi NCR"
+    ],
+    "basePriceInr": 15000,
+    "priceUnit": "event",
+    "priceNote": "Indicative mehendi for the couple plus 10 guests.",
+    "rating": 4.5,
+    "reviewCount": 61,
+    "tags": [
+      "mehendi",
+      "traditional",
+      "budget",
+      "wedding"
+    ],
+    "description": "Fine-line and traditional mehendi with natural henna.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "beauty-salon-nomad",
+    "name": "Salon Nomad",
+    "category": "beauty",
+    "cities": [
+      "Mumbai"
+    ],
+    "basePriceInr": 45000,
+    "priceUnit": "event",
+    "priceNote": "Indicative on-location hair and makeup team.",
+    "rating": 4.6,
+    "reviewCount": 89,
+    "tags": [
+      "hair",
+      "luxury",
+      "modern",
+      "on-location"
+    ],
+    "description": "A mobile team for hair, makeup and quick changes across the event.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "planning-saffron-events",
+    "name": "Saffron Events",
+    "category": "planning",
+    "cities": [
+      "Pan-India"
+    ],
+    "basePriceInr": 120000,
+    "priceUnit": "event",
+    "priceNote": "Indicative full planning fee for a 150-guest event.",
+    "rating": 4.7,
+    "reviewCount": 132,
+    "tags": [
+      "full-service",
+      "corporate",
+      "wedding",
+      "logistics"
+    ],
+    "description": "End-to-end planning with vendor contracts and a day-of ops team.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "planning-two-pencils",
+    "name": "Two Pencils",
+    "category": "planning",
+    "cities": [
+      "Bengaluru"
+    ],
+    "basePriceInr": 60000,
+    "priceUnit": "event",
+    "priceNote": "Indicative day-of coordination fee.",
+    "rating": 4.5,
+    "reviewCount": 47,
+    "tags": [
+      "day-of",
+      "budget",
+      "logistics",
+      "modern"
+    ],
+    "description": "Day-of coordination for hosts who have already booked their vendors.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "activities-carnival-crew",
+    "name": "Carnival Crew",
+    "category": "activities",
+    "cities": [
+      "Pan-India"
+    ],
+    "basePriceInr": 40000,
+    "priceUnit": "event",
+    "priceNote": "Indicative games host and activity stations for 3 hours.",
+    "rating": 4.6,
+    "reviewCount": 93,
+    "tags": [
+      "games",
+      "kids",
+      "birthday",
+      "entertainment"
+    ],
+    "description": "Portable game stations and hosts for mixed-age groups.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "activities-pottery-chai",
+    "name": "Pottery & Chai",
+    "category": "activities",
+    "cities": [
+      "Jaipur",
+      "Delhi NCR"
+    ],
+    "basePriceInr": 20000,
+    "priceUnit": "event",
+    "priceNote": "Indicative workshop for up to 25 participants.",
+    "rating": 4.8,
+    "reviewCount": 39,
+    "tags": [
+      "workshop",
+      "community",
+      "sustainable",
+      "intimate"
+    ],
+    "description": "A hands-on pottery workshop with chai and take-home pieces.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  },
+  {
+    "id": "activities-sound-light",
+    "name": "Sound & Light Lab",
+    "category": "activities",
+    "cities": [
+      "Delhi NCR",
+      "Bengaluru"
+    ],
+    "basePriceInr": 90000,
+    "priceUnit": "event",
+    "priceNote": "Indicative stage, sound and lighting package.",
+    "rating": 4.5,
+    "reviewCount": 67,
+    "tags": [
+      "av",
+      "corporate",
+      "production",
+      "conference"
+    ],
+    "description": "AV production for conferences and community stages.",
+    "demo": true,
+    "availabilityNote": "Demo listing — availability not verified."
+  }
+]
