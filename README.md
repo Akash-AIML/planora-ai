@@ -67,6 +67,12 @@ Run the comprehensive unit test suite:
 npm test
 ```
 
+Run unit tests with code coverage:
+
+```bash
+npm run test:coverage
+```
+
 Run lint checks:
 
 ```bash
@@ -78,6 +84,14 @@ Run production build:
 ```bash
 npm run build
 ```
+
+---
+
+## 🛡️ Continuous Integration & Quality Gates
+
+Automated testing and quality gate scanning are configured via GitHub Actions in [`.github/workflows/sonarqube.yml`](.github/workflows/sonarqube.yml) and [`sonar-project.properties`](sonar-project.properties):
+- **Triggers:** Push to `main`, Pull Requests, and manual workflow dispatch.
+- **Pipeline:** Code linting (`eslint`), unit testing with V8 coverage (`vitest --coverage`), production compilation (`next build`), and SonarQube / SonarCloud security and code quality analysis.
 
 ---
 
