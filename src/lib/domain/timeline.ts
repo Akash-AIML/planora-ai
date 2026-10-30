@@ -1,4 +1,16 @@
-import type { EventRequirements, EventType, TaskPriority } from "./types";
+import type { EventRequirements, EventType, TaskPriority, TaskStatus } from "./types";
+
+/**
+ * State machine transition for timeline tasks: todo -> doing -> done -> todo
+ */
+export function getNextTaskStatus(current: TaskStatus): TaskStatus {
+  const transitions: Record<TaskStatus, TaskStatus> = {
+    todo: "doing",
+    doing: "done",
+    done: "todo",
+  };
+  return transitions[current] ?? "todo";
+}
 
 interface TimelineTemplate {
   phase: string;

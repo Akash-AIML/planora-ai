@@ -265,3 +265,23 @@ export function getSampleInitialEvent(): EventDetail {
 
   return detail;
 }
+
+/**
+ * Builds a clean Markdown document summary from an EventDetail for copying or documentation
+ */
+export function generateEventMarkdown(detail: EventDetail): string {
+  const completedTasks = (detail.tasks ?? []).filter((t) => t.status === "done").length;
+  const totalTasks = (detail.tasks ?? []).length;
+
+  return `# ${detail.event.title}
+**Event Type:** ${detail.event.eventType}
+**Date:** ${detail.event.eventDate} | **City:** ${detail.event.city} | **Guests:** ${detail.event.guestCount}
+**Total Budget:** ₹${detail.event.budgetInr.toLocaleString("en-IN")}
+**Planned Spend:** ₹${detail.totals.plannedInr.toLocaleString("en-IN")}
+
+## Budget Allocations
+${(detail.budgetItems ?? []).map((b) => `- ${b.category} (${b.label}): Planned ₹${b.plannedInr.toLocaleString("en-IN")}`).join("\n")}
+
+## Key Milestones (${completedTasks}/${totalTasks} Completed)
+${(detail.tasks ?? []).map((t) => `- [${t.status === "done" ? "x" : " "}] ${t.title} (${t.phase})`).join("\n")}`;
+}

@@ -140,6 +140,15 @@ export function sanitizeRupees(value: unknown, max = 1_000_000_000): number {
   return Math.min(max, Math.max(0, Math.round(numeric)));
 }
 
+/**
+ * Safely parses string inputs with commas, symbols, or currency prefixes into non-negative integers.
+ */
+export function parseRupeeInputValue(value: string): number {
+  if (!value || typeof value !== "string") return 0;
+  const digits = value.replace(/[^0-9]/g, "");
+  return digits ? Math.max(0, parseInt(digits, 10)) : 0;
+}
+
 function safeAmount(value: number): number {
   return Number.isFinite(value) ? Math.max(0, Math.round(value)) : 0;
 }
