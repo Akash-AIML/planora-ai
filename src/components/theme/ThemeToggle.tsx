@@ -1,19 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun, Laptop } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 const emptySubscribe = () => () => {};
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const mounted = React.useSyncExternalStore(
     emptySubscribe,
     () => true,
@@ -22,48 +17,35 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="h-9 w-9 rounded-xl border border-border bg-background/80 flex items-center justify-center text-muted-foreground">
-        <Sun className="h-4 w-4" />
-      </div>
+      <Button
+        variant="outline"
+        size="icon"
+        className="h-9 w-9 rounded-xl border-border bg-background/80"
+        disabled
+        aria-label="Toggle theme"
+      >
+        <Sun className="h-4 w-4 text-muted-foreground" />
+      </Button>
     );
   }
 
+  const isDark = resolvedTheme === "dark";
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        className="inline-flex items-center justify-center h-9 w-9 rounded-xl border border-border bg-background/80 backdrop-blur hover:bg-muted transition cursor-pointer text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        aria-label="Select theme mode"
-      >
-        {theme === "dark" ? (
-          <Moon className="h-4 w-4 text-indigo-400 transition-transform rotate-0 scale-100" />
-        ) : (
-          <Sun className="h-4 w-4 text-amber-500 transition-transform rotate-0 scale-100" />
-        )}
-        <span className="sr-only">Toggle theme</span>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-36 rounded-xl border-border bg-popover/95 backdrop-blur-md shadow-lg z-50">
-        <DropdownMenuItem
-          onClick={() => setTheme("light")}
-          className="flex items-center gap-2 cursor-pointer font-medium text-xs py-2 hover:bg-muted"
-        >
-          <Sun className="h-4 w-4 text-amber-500" />
-          <span>Light</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setTheme("dark")}
-          className="flex items-center gap-2 cursor-pointer font-medium text-xs py-2 hover:bg-muted"
-        >
-          <Moon className="h-4 w-4 text-indigo-400" />
-          <span>Dark</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setTheme("system")}
-          className="flex items-center gap-2 cursor-pointer font-medium text-xs py-2 hover:bg-muted"
-        >
-          <Laptop className="h-4 w-4 text-muted-foreground" />
-          <span>System</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className="h-9 w-9 rounded-xl border-border bg-background/80 backdrop-blur hover:bg-muted transition-all cursor-pointer text-foreground shadow-2xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+    >
+      {isDark ? (
+        <Sun className="h-4 w-4 text-amber-400 transition-transform duration-200 rotate-0 scale-100 hover:rotate-45" />
+      ) : (
+        <Moon className="h-4 w-4 text-indigo-600 transition-transform duration-200 rotate-0 scale-100 hover:-rotate-12" />
+      )}
+      <span className="sr-only">{isDark ? "Switch to light mode" : "Switch to dark mode"}</span>
+    </Button>
   );
 }
