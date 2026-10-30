@@ -52,6 +52,7 @@ jobs:
       - name: SonarQube / SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6
         if: ${{ env.SONAR_TOKEN != '' }}
+        continue-on-error: true # Prevents CI failure if Automatic Analysis is enabled in SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL || 'https://sonarcloud.io' }}
