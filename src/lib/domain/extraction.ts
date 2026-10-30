@@ -185,10 +185,10 @@ function findCity(lower: string): string | null {
 
 function findGuests(lower: string): number | null {
   const patterns = [
-    /(\d[\d,]*)\s*(?:guests?|people|persons?|pax|attendees|headcount|kids|children|members)\b/i,
-    /(\d[\d,]*)[- ](?:guest|kid|child)\b/i,
-    /\bguests?\s*(?:of|:|around|about)?\s*(\d[\d,]*)\b/i,
-    /\bfor\s+(\d[\d,]*)\s+(?:people|guests?|kids|children)\b/i,
+    /\b(\d[0-9,]*)\s+(?:guests?|people|persons?|pax|attendees|headcount|kids|children|members)\b/i,
+    /\b(\d[0-9,]*)[- ](?:guest|kid|child)\b/i,
+    /\bguests?(?:\s+(?:of|around|about)|[:=])?\s+(\d[0-9,]*)\b/i,
+    /\bfor\s+(\d[0-9,]*)\s+(?:people|guests?|kids|children)\b/i,
   ];
   for (const pattern of patterns) {
     const match = pattern.exec(lower);
@@ -203,11 +203,11 @@ function findGuests(lower: string): number | null {
 function findBudget(lower: string): number | null {
   const unit = "(lakh|lakhs|lac|lacs|crore|crores|cr|k|thousand)?";
   const patterns = [
-    new RegExp(`(?:₹|rs\\.?|inr)\\s*([\\d,.]+)\\s*${unit}`, "i"),
-    new RegExp(`budget\\s*(?:of|is|around|about|:)?\\s*(?:₹|rs\\.?|inr)?\\s*([\\d,.]+)\\s*${unit}`, "i"),
-    new RegExp(`(?:under|within|upto|up to|max(?:imum)?)\\s*(?:₹|rs\\.?|inr)?\\s*([\\d,.]+)\\s*${unit}`, "i"),
-    new RegExp(`([\\d,.]+)\\s*(lakh|lakhs|lac|lacs|crore|crores|cr|k|thousand)\\s*(?:budget|max|maximum|spend|to spend)`, "i"),
-    new RegExp(`(?:with|around|about|of)?\\s*([\\d,.]+)\\s*(k|thousand|lakh|lakhs|lac|lacs|crore|crores|cr)\\s+budget`, "i"),
+    new RegExp(`(?:₹|rs\\.?|inr)\\s*(\\d[\\d,.]*)\\s*${unit}\\b`, "i"),
+    new RegExp(`\\bbudget(?:\\s+(?:of|is|around|about)|[:=])?\\s*(?:₹|rs\\.?|inr)?\\s*(\\d[\\d,.]*)\\s*${unit}\\b`, "i"),
+    new RegExp(`\\b(?:under|within|upto|up to|max(?:imum)?)\\s+(?:₹|rs\\.?|inr)?\\s*(\\d[\\d,.]*)\\s*${unit}\\b`, "i"),
+    new RegExp(`\\b(\\d[\\d,.]*)\\s*(lakh|lakhs|lac|lacs|crore|crores|cr|k|thousand)\\s+(?:budget|max|maximum|spend|to spend)\\b`, "i"),
+    new RegExp(`\\b(?:(?:with|around|about|of)\\s+)?(\\d[\\d,.]*)\\s*(k|thousand|lakh|lakhs|lac|lacs|crore|crores|cr)\\s+budget\\b`, "i"),
   ];
 
   for (const pattern of patterns) {
