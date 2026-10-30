@@ -20,6 +20,7 @@ interface ClientBucket {
 const ipStore = new Map<string, ClientBucket>();
 let lastGlobalCleanup = Date.now();
 const GLOBAL_CLEANUP_INTERVAL_MS = 60 * 1000; // 1 minute
+const DEFAULT_RATE_LIMIT_CONFIG: RateLimitConfig = { maxRequests: 20, windowMs: 60 * 1000 };
 
 /**
  * Periodically purge stale entries from memory
@@ -45,7 +46,7 @@ function cleanupExpiredBuckets(windowMs: number) {
  */
 export function checkRateLimit(
   clientId: string,
-  config: RateLimitConfig = { maxRequests: 20, windowMs: 60 * 1000 }
+  config: RateLimitConfig = DEFAULT_RATE_LIMIT_CONFIG
 ): RateLimitResult {
   cleanupExpiredBuckets(config.windowMs);
 

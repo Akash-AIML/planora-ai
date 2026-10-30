@@ -11,7 +11,7 @@ import { getClientIp } from "@/lib/security/middleware-guard";
  * GET /api/auth/session
  * Returns current session status or issues a fresh cryptographically signed session cookie
  */
-export async function GET(req: Request) {
+export function GET(req: Request) {
   const clientIp = getClientIp(req);
   const fingerprint = computeClientFingerprint(req.headers, clientIp);
   const cookieHeader = req.headers.get("cookie") || "";
@@ -69,7 +69,7 @@ export async function GET(req: Request) {
  * POST /api/auth/session
  * Rotate session token (Anti-Session Fixation)
  */
-export async function POST(req: Request) {
+export function POST(req: Request) {
   const clientIp = getClientIp(req);
   const fingerprint = computeClientFingerprint(req.headers, clientIp);
   const clientId = `client_${Date.now()}`;

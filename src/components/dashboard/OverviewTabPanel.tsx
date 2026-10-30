@@ -174,7 +174,7 @@ export function OverviewTabPanel({
         <div>
           <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse" />
-            Need to Adjust Your Budget or Scope?
+            <span>Need to Adjust Your Budget or Scope?</span>
           </h4>
           <p className="text-xs text-muted-foreground mt-1 max-w-xl">
             Simulate reductions or increases. Planora AI enforces category floors (e.g. Venue & Catering ~70%)

@@ -70,7 +70,7 @@ export async function guardApiRequest<T = unknown>(
 
   // 2. Content-Length & Payload Size Limit (Anti-Memory Exhaustion)
   const contentLength = req.headers.get("content-length");
-  if (contentLength && parseInt(contentLength, 10) > (options.maxPayloadBytes || 64 * 1024)) {
+  if (contentLength && Number.parseInt(contentLength, 10) > (options.maxPayloadBytes || 64 * 1024)) {
     return {
       success: false,
       clientIp,

@@ -39,11 +39,14 @@ export interface LLMServiceResult {
  * Strips markdown code blocks and whitespace from raw LLM responses
  */
 export function cleanJsonOutput(text: string): string {
+  const FENCE = "```";
   let cleaned = text.trim();
-  if (cleaned.startsWith("```json")) {
-    cleaned = cleaned.replace(/^```json\s*/, "").replace(/\s*```$/, "");
-  } else if (cleaned.startsWith("```")) {
-    cleaned = cleaned.replace(/^```\s*/, "").replace(/\s*```$/, "");
+  if (cleaned.startsWith(FENCE)) {
+    const prefix = cleaned.startsWith(`${FENCE}json`) ? `${FENCE}json` : FENCE;
+    cleaned = cleaned.slice(prefix.length).trimStart().trimEnd();
+    if (cleaned.endsWith(FENCE)) {
+      cleaned = cleaned.slice(0, -FENCE.length);
+    }
   }
   return cleaned.trim();
 }
